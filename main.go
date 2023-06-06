@@ -10,6 +10,10 @@ func main() {
 
 	app.Get("/authenticate", controllers.Authenticate)
 
+	app.Static("/public", "./public/index.html")
+	app.Get("/getStuff", controllers.GetStuff)
+	app.Post("/pushThingy", controllers.PushThingy)
+
 	err := app.Listen(":3000")
 	if err != nil {
 		panic(err)

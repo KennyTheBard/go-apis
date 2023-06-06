@@ -3,3 +3,20 @@
 
 ###
 GET {{host}}/authenticate HTTP/1.1
+
+
+###
+GET {{host}}/public HTTP/1.1
+
+
+###
+GET {{host}}/getStuff HTTP/1.1
+
+
+###
+POST {{host}}/pushThingy HTTP/1.1
+
+{
+    "name": "test",
+    "value": 100
+}
