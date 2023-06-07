@@ -8,14 +8,12 @@ import (
 	"hellkite.eu/go-api/utils"
 )
 
-var jwtSecret = []byte(utils.String(20))
-
 func Authenticate(c *fiber.Ctx) error {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(time.Date(2023, 10, 10, 12, 0, 0, 0, time.UTC)),
 		Issuer:    "kenny",
 	})
-	tokenString, err := token.SignedString(jwtSecret)
+	tokenString, err := token.SignedString(utils.JwtSecret)
 	if err != nil {
 		panic(err)
 	}

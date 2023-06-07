@@ -1,8 +1,8 @@
 @host=http://localhost:3000
-
+@jwtToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJrZW5ueSIsImV4cCI6MTY5NjkzOTIwMH0.fMqc0q74SPdAOgZfLkXMej_2mm0Fy-uTT8zbmXTN4Zs
 
 ###
-GET {{host}}/authenticate HTTP/1.1
+GET {{host}}/public/authenticate HTTP/1.1
 
 
 ###
@@ -10,11 +10,13 @@ GET {{host}}/public HTTP/1.1
 
 
 ###
-GET {{host}}/getStuff HTTP/1.1
-
+GET {{host}}/api/getStuff HTTP/1.1
+Authorization: Bearer {{jwtToken}}
 
 ###
-POST {{host}}/pushThingy HTTP/1.1
+POST {{host}}/api/pushThingy HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer {{jwtToken}}
 
 {
     "name": "test",
