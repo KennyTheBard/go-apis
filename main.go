@@ -24,7 +24,10 @@ func main() {
 	// configure routes
 	publicGroup := app.Group("/public")
 	publicGroup.Get("/authenticate", controllers.Authenticate)
-	publicGroup.Post("/register", controllers.Register)
+	publicGroup.Post("/register", controllers.CreateUser)
+	publicGroup.Post("/getAllUsers", controllers.GetAllUsers)
+	publicGroup.Post("/getUserById", controllers.GetUserById)
+	publicGroup.Post("/updateUserName", controllers.UpdateUserName)
 	publicGroup.Static("/", "./public/index.html")
 
 	apiGroup := app.Group("/api", middlewares.JwtAuthMiddleware)
