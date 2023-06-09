@@ -2,16 +2,16 @@ package controllers
 
 import (
 	"github.com/gofiber/fiber/v2"
-	"hellkite.eu/go-api/services"
+	"hellkite.eu/go-api/models"
 )
 
 func CreateUser(c *fiber.Ctx) error {
-	request := RegisterRequest{}
+	var request RegisterRequest
 	if err := c.BodyParser(&request); err != nil {
 		return err
 	}
-	user, err := services.CreateUser(request.Name, request.Email)
-	if err != nil {
+	user := models.User{Name: request.Name, Email: request.Email}
+	if err := models.DB.Create(&request).Error; err != nil {
 		return err
 	}
 	return c.JSON(user)
@@ -23,19 +23,20 @@ type RegisterRequest struct {
 }
 
 func GetAllUsers(c *fiber.Ctx) error {
-	users, err := services.GetAllUsers()
-	if err != nil {
+	var users []models.User
+	if err := models.DB.Find(&users).Error; err != nil {
 		return err
 	}
 	return c.JSON(users)
 }
 
 func GetUserById(c *fiber.Ctx) error {
-	request := GetUserByIdRequest{}
+	var request GetUserByIdRequest
 	if err := c.BodyParser(&request); err != nil {
 		return err
 	}
-	user, err := services.GetUserById(request.ID)
+	var user models.User
+	err := models.DB.First(&user, request.ID).Error
 	if err != nil {
 		return err
 	}
@@ -47,12 +48,16 @@ type GetUserByIdRequest struct {
 }
 
 func UpdateUserName(c *fiber.Ctx) error {
-	request := UpdateUserNameRequest{}
+	var request UpdateUserNameRequest
 	if err := c.BodyParser(&request); err != nil {
 		return err
 	}
-	user, err := services.UpdateUserById(request.ID, request.Name)
-	if err != nil {
+	var user models.User
+	if err := models.DB.First(&user, request.ID).Error; err != nil {
+		return err
+	}
+	user.Name = request.Name
+	if err := models.DB.Save(&user).Error; err != nil {
 		return err
 	}
 	return c.JSON(user)

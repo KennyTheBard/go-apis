@@ -28,6 +28,8 @@ func main() {
 	publicGroup.Post("/getAllUsers", controllers.GetAllUsers)
 	publicGroup.Post("/getUserById", controllers.GetUserById)
 	publicGroup.Post("/updateUserName", controllers.UpdateUserName)
+	publicGroup.Post("/createOrder", controllers.CreateOrder)
+	publicGroup.Post("/getAllOrders", controllers.GetAllOrders)
 	publicGroup.Static("/", "./public/index.html")
 
 	apiGroup := app.Group("/api", middlewares.JwtAuthMiddleware)
