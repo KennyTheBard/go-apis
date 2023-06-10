@@ -3,16 +3,26 @@ package main
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/gofiber/fiber/v2/middleware/recover"
 	"hellkite.eu/go-api/controllers"
+	"hellkite.eu/go-api/data"
 	"hellkite.eu/go-api/middlewares"
-	"hellkite.eu/go-api/models"
+
+	"github.com/apex/log"
 )
 
 func main() {
 	var err error
 
+	// init logger
+	logger := log.WithFields(log.Fields{
+		"file": "something.png",
+		"type": "image/png",
+		"user": "tobi",
+	})
+
 	// database connection
-	err = models.InitDatabaseConnection()
+	db, err := data.InitDatabaseConnection()
 	if err != nil {
 		panic(err)
 	}
@@ -20,16 +30,23 @@ func main() {
 	// configure server
 	app := fiber.New()
 	app.Use(cors.New())
+	app.Use(recover.New())
+	app.Use(func(c *fiber.Ctx) error {
+		c.Locals("logger", logger)
+		return c.Next()
+	})
+
+	userController := &controllers.Controller{Logger: logger, DB: db}
 
 	// configure routes
 	publicGroup := app.Group("/public")
 	publicGroup.Get("/authenticate", controllers.Authenticate)
-	publicGroup.Post("/register", controllers.CreateUser)
-	publicGroup.Post("/getAllUsers", controllers.GetAllUsers)
-	publicGroup.Post("/getUserById", controllers.GetUserById)
-	publicGroup.Post("/updateUserName", controllers.UpdateUserName)
-	publicGroup.Post("/createOrder", controllers.CreateOrder)
-	publicGroup.Post("/getAllOrders", controllers.GetAllOrders)
+	publicGroup.Post("/register", userController.CreateUser)
+	publicGroup.Post("/getAllUsers", userController.GetAllUsers)
+	publicGroup.Post("/getUserById", userController.GetUserById)
+	publicGroup.Post("/updateUserName", userController.UpdateUserName)
+	publicGroup.Post("/createOrder", userController.CreateOrder)
+	publicGroup.Post("/getAllOrders", userController.GetAllOrders)
 	publicGroup.Static("/", "./public/index.html")
 
 	apiGroup := app.Group("/api", middlewares.JwtAuthMiddleware)

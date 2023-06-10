@@ -30,7 +30,7 @@ Content-Type: application/json
 
 {
     "id": 2,
-    "name": "test"
+    "name": "test2"
 }
 
 ###
@@ -38,7 +38,7 @@ POST {{host}}/public/createOrder HTTP/1.1
 Content-Type: application/json
 
 {
-    "userId": 5,
+    "userId": 3,
     "orderDate": "2023-06-09T15:21:43.441Z",
     "totalAmount": 420.69
 }
