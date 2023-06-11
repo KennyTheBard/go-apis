@@ -36,17 +36,18 @@ func main() {
 		return c.Next()
 	})
 
-	userController := &controllers.Controller{Logger: logger, DB: db}
+	controller := &controllers.Controller{Logger: logger, DB: db}
 
 	// configure routes
 	publicGroup := app.Group("/public")
-	publicGroup.Get("/authenticate", controllers.Authenticate)
-	publicGroup.Post("/register", userController.CreateUser)
-	publicGroup.Post("/getAllUsers", userController.GetAllUsers)
-	publicGroup.Post("/getUserById", userController.GetUserById)
-	publicGroup.Post("/updateUserName", userController.UpdateUserName)
-	publicGroup.Post("/createOrder", userController.CreateOrder)
-	publicGroup.Post("/getAllOrders", userController.GetAllOrders)
+	publicGroup.Get("/authenticate", controller.Authenticate)
+	publicGroup.Post("/register", controller.CreateUser)
+	publicGroup.Post("/getAllUsers", controller.GetAllUsers)
+	publicGroup.Post("/getUserById", controller.GetUserById)
+	publicGroup.Post("/updateUserName", controller.UpdateUserName)
+	publicGroup.Post("/createOrder", controller.CreateOrder)
+	publicGroup.Post("/getAllOrders", controller.GetAllOrders)
+	publicGroup.Get("/getJoke", controller.GetJoke)
 	publicGroup.Static("/", "./public/index.html")
 
 	apiGroup := app.Group("/api", middlewares.JwtAuthMiddleware)

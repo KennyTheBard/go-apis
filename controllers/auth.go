@@ -8,7 +8,7 @@ import (
 	"hellkite.eu/go-api/utils"
 )
 
-func Authenticate(c *fiber.Ctx) error {
+func (c *Controller) Authenticate(ctx *fiber.Ctx) error {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.RegisteredClaims{
 		ExpiresAt: jwt.NewNumericDate(time.Date(2023, 10, 10, 12, 0, 0, 0, time.UTC)),
 		Issuer:    "kenny",
@@ -20,7 +20,7 @@ func Authenticate(c *fiber.Ctx) error {
 	response := &AuthenticateResponse{
 		Token: tokenString,
 	}
-	return c.JSON(response)
+	return ctx.JSON(response)
 }
 
 type AuthenticateResponse struct {

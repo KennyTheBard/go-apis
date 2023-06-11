@@ -46,6 +46,9 @@ Content-Type: application/json
 ###
 POST {{host}}/public/getAllOrders HTTP/1.1
 
+###
+GET {{host}}/public/getJoke HTTP/1.1
+
 
 ###
 GET {{host}}/public HTTP/1.1
